@@ -1,5 +1,7 @@
 // import { IncomingHttpHeaders } from "./key-value.interface";
 import { IncomingHttpHeaders } from 'http';
+import { IResponse } from './response.interface';
+
 
 /**
  * A REST API response object.
@@ -63,13 +65,29 @@ export class NightwolfResponse {
         return lines.join('\n').replace('\n\n', '\n');
     }
 
+    public toJson(): IResponse {
+        let body = this.body;
+
+        if (this.getContentType().includes('application/json')) {
+            body = JSON.parse(this.body as string);
+        }
+
+        return {
+            code: this.code,
+            message: this.message,
+            headers: this.headers,
+            body: body,
+        }
+    }
+
     private getContentType(): string {
-        const defaultContentType = 'text/html; charset=UTF-8';
-        return Object.keys(this.headers).find(key => {
-            if (key.toLowerCase() === 'content-type') {
-                return this.headers[key];
-            }
-        }) || defaultContentType;
+        return Object.keys(this.headers)
+            .map(key => {
+                if (key.toLowerCase() === 'content-type') {
+                    return this.headers[key] as string;
+                }
+            })
+            .filter(value => value)[0];
     }
 
 }

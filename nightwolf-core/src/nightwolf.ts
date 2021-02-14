@@ -4,6 +4,7 @@ import { NightwolfOptions } from './data/nightwolf-options';
 import { EnvironmentService } from './services/environment-service';
 import { RestService } from './services/rest-service';
 import { FileService } from './services/file-service';
+import { NightwolfResponse } from './data/nightwolf-response';
 
 /**
  * This class is the entrypoint the functionality of the Nightwolf library.
@@ -34,14 +35,14 @@ export class Nightwolf {
         requestPath: string,
         environmentPaths: string[],
         parameters: IKeyValue,
-    ): Promise<void> {
+    ): Promise<NightwolfResponse> {
 
         return Promise.all([
             FileService.loadHttpRequest(options, requestPath),
             EnvironmentService.resolveEnvironments(options, environmentPaths),
         ])
         .then(([request, environment]) => {
-            RestService.makeRequest(options, request, environment, parameters);
+            return RestService.makeRequest(options, request, environment, parameters);
         });
 
     }
