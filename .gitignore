@@ -1,0 +1,6 @@
+# generated files
+**/node_modules
+**/dist
+
+# user data
+./data

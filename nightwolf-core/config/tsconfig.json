@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "moduleResolution": "node",
+        "module": "es6",
+        "target": "es2017",
+        "declaration": true,
+        "outDir": "../dist",
+        "lib": [
+            "ES2018"
+        ]
+    },
+    "include": [
+        "../src/**/*"
+    ],
+    "types": [
+        "node",
+        "mocha"
+    ]
+}
