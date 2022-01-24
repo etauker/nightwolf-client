@@ -2,8 +2,9 @@ import * as fs from 'fs';
 import * as readline from 'readline';
 
 import { Observable } from 'rxjs';
-import { NightwolfOptions } from '../data/nightwolf-options';
-import { NightwolfRequest } from '../data/nightwolf-request';
+import { NightwolfOptions } from '../data/nightwolf-options.interface';
+import { DeprecatedNightwolfRequest } from '../data/nightwolf-request';
+import { NightwolfSettings } from '../data/nightwolf-settings.interface';
 import { RequestFactory } from './request-factory';
 
 
@@ -36,11 +37,24 @@ export class FileService {
     }
 
 
+    public static loadFile(settings: NightwolfSettings, options: NightwolfOptions, path: string): Promise<string> {
+        return new Promise((resolve, reject) => {
+            const lines = [];
+
+            FileService.readLines(options, path).subscribe(
+                line => lines.push(line),
+                error => reject(error),
+                () => resolve(lines.join('\n'))
+            );
+        });
+    }
+
+
     /**
-     * Reads a http request file at the provided path, parses it into a NightwolfRequest.
+     * Reads a http request file at the provided path, parses it into a DeprecatedNightwolfRequest.
      * @param {NightwolfOptions} options request options
      * @param {string} path path of the file to load
-     * @returns {Promise<NightwolfRequest>}
+     * @returns {Promise<DeprecatedNightwolfRequest>}
      * 
      * @example <caption>Format of file contents:</caption>
      * POST https://example.com/post-endpoint
@@ -52,7 +66,7 @@ export class FileService {
      *     "json": "json value"
      * }
      */
-    public static loadHttpRequest(options: NightwolfOptions, path: string): Promise<NightwolfRequest> {
+    public static loadHttpRequest(options: NightwolfOptions, path: string): Promise<DeprecatedNightwolfRequest> {
         return new Promise((resolve, reject) => {
             const lines = [];
 
@@ -66,10 +80,10 @@ export class FileService {
 
 
     /**
-     * Reads a json request file at the provided path, parses it into a NightwolfRequest.
+     * Reads a json request file at the provided path, parses it into a DeprecatedNightwolfRequest.
      * @param {NightwolfOptions} options request options
      * @param {string} path path of the file to load
-     * @returns {NightwolfRequest}
+     * @returns {DeprecatedNightwolfRequest}
      * 
      * @example <caption>Format of file contents:</caption>
      * {
@@ -84,7 +98,7 @@ export class FileService {
      *     }
      * }
      */
-    public static loadJsonRequest(options: NightwolfOptions, path: string): Promise<NightwolfRequest> {
+    public static loadJsonRequest(options: NightwolfOptions, path: string): Promise<DeprecatedNightwolfRequest> {
         return new Promise((resolve, reject) => {
             const lines = [];
 

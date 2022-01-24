@@ -1,11 +1,12 @@
 import * as http from 'http';
 import * as https from 'https';
 
-import { NightwolfOptions } from "../data/nightwolf-options";
-import { NightwolfRequest } from "../data/nightwolf-request";
-import { NightwolfResponse } from "../data/nightwolf-response";
+import { DeprecatedNightwolfOptions } from '../data/nightwolf-options';
+import { DeprecatedNightwolfRequest } from '../data/nightwolf-request';
+import { DeprecatedNightwolfResponse } from '../data/nightwolf-response';
 import { IKeyValue } from '../data/key-value.interface';
 import { RequestFactory } from './request-factory';
+import { NightwolfSettings } from '../data/nightwolf-settings.interface';
 
 
 /**
@@ -15,11 +16,12 @@ import { RequestFactory } from './request-factory';
 export class RestService {
 
     public static makeRequest(
-        options: NightwolfOptions,
-        request: NightwolfRequest,
+        settings: NightwolfSettings,
+        options: DeprecatedNightwolfOptions,
+        request: DeprecatedNightwolfRequest,
         environment: IKeyValue,
         parameters: IKeyValue,
-    ): Promise<NightwolfResponse> {
+    ): Promise<DeprecatedNightwolfResponse> {
 
         const copy = RequestFactory.substitute(request, environment, parameters);
         if (options.getPrintRequest()) {
@@ -35,7 +37,7 @@ export class RestService {
     }
 
 
-    private static _makeRequest(request: NightwolfRequest): Promise<NightwolfResponse> {
+    private static _makeRequest(request: DeprecatedNightwolfRequest): Promise<DeprecatedNightwolfResponse> {
         const library = request.getUrl().startsWith('https') ? https : http;
         const options: http.RequestOptions = {
             'method': request.getMethod(),
@@ -53,7 +55,7 @@ export class RestService {
                 });
 
                 res.on('end', () => {
-                    const response = new NightwolfResponse(res.statusCode, res.statusMessage, res.headers, responseBody);
+                    const response = new DeprecatedNightwolfResponse(res.statusCode, res.statusMessage, res.headers, responseBody);
                     resolve(response);
                 });
             });

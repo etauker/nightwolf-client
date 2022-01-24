@@ -6,7 +6,7 @@ import { IResponse } from './response.interface';
 /**
  * A REST API response object.
  */
-export class NightwolfResponse {
+export class DeprecatedNightwolfResponse {
 
     private id: string;
     private code: number;
@@ -29,10 +29,10 @@ export class NightwolfResponse {
     }
     
     
-    public setCode(code: number): NightwolfResponse {
+    public setCode(code: number): DeprecatedNightwolfResponse {
         return this;
     }
-    public setMessage(message: string): NightwolfResponse {
+    public setMessage(message: string): DeprecatedNightwolfResponse {
         this.message = message;
         return this;
     }

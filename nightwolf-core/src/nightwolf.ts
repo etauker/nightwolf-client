@@ -1,10 +1,12 @@
 import { IKeyValue } from './data/key-value.interface';
-import { NightwolfOptions } from './data/nightwolf-options';
 
 import { EnvironmentService } from './services/environment-service';
 import { RestService } from './services/rest-service';
-import { FileService } from './services/file-service';
-import { NightwolfResponse } from './data/nightwolf-response';
+import { NightwolfRequestData } from './data/nightwolf-request-data.interface';
+import { NightwolfSettings } from './data/nightwolf-settings.interface';
+import { SettingsService } from './services/settings-service';
+import { NightwolfOptions } from './data/nightwolf-options.interface';
+import { NightwolfResponse } from './data/nightwolf-response.interface';
 
 /**
  * This class is the entrypoint the functionality of the Nightwolf library.
@@ -30,21 +32,46 @@ export class Nightwolf {
      * @param {IKeyValue} parameters request parameters to consider for substitution  
      *      (replaces <strong>${ param.KEY }</strong> placeholders in the request file)
      */
-    public static run(
-        options: NightwolfOptions,
-        requestPath: string,
-        environmentPaths: string[],
-        parameters: IKeyValue,
-    ): Promise<NightwolfResponse> {
 
-        return Promise.all([
-            FileService.loadHttpRequest(options, requestPath),
-            EnvironmentService.resolveEnvironments(options, environmentPaths),
-        ])
-        .then(([request, environment]) => {
-            return RestService.makeRequest(options, request, environment, parameters);
+
+
+
+    public static runOnce(
+        requests: NightwolfRequestData[],
+        settingsPaths: string[] = [],
+        environmentPaths: string[] = [],
+        settingsOverrides: Partial<NightwolfSettings> = {},
+        environmentOverrides: Partial<IKeyValue> = {},
+    ): Promise<NightwolfResponse[]> {
+
+        
+        const promises = requests.map(data => {
+            // let settings, template;
+
+            return Promise.all([
+                SettingsService.resolveSettings(data.options, settingsPaths, settingsOverrides),
+                EnvironmentService.resolveEnvironments(data.options, environmentPaths, environmentOverrides),
+            ])
+            .then(([settings, environment]) => {
+                return Promise.all([
+                    TemplateService.loadTemplate(settings, data.options, data.path),
+                    settings,
+                    environment,
+                ])
+            })
+            .then(([template, settings, environment]) => {
+                return Promise.all([
+                    TemplateService.substitute(settings, data.options, template, environment, data.parameters),
+                    settings,
+                    environment,
+                ])
+            })
+            .then(([request, settings, environment]) => {
+                return RestService.makeRequest(settings, data.options, request, environment, data.parameters);
+            });
         });
 
+        return Promise.all(promises)
     }
 
 

@@ -1,18 +1,18 @@
-import { NightwolfRequest } from "../data/nightwolf-request";
+import { DeprecatedNightwolfRequest } from "../data/nightwolf-request";
 import { IKeyValue } from '../data/key-value.interface';
 
 
 /**
- * A factory service used for creating NightwolfRequest objects.
+ * A factory service used for creating DeprecatedNightwolfRequest objects.
  * @hideconstructor
  */
 export class RequestFactory {
 
     /**
-     * Parses lines of a json file into a NightwolfRequest object.
+     * Parses lines of a json file into a DeprecatedNightwolfRequest object.
      * @param {string[]} lines lines of a json file to parse
      */
-    public static fromJsonFile(lines: string[]): NightwolfRequest {
+    public static fromJsonFile(lines: string[]): DeprecatedNightwolfRequest {
         const [envReplaced, envObject] = RequestFactory._collectPlaceholders('env', lines);
         const [paramsReplaced, paramObject] = RequestFactory._collectPlaceholders('param', envReplaced);
 
@@ -22,17 +22,17 @@ export class RequestFactory {
             : JSON.stringify(json.body)
         ;
 
-        return new NightwolfRequest(json.method, json.url, json.headers, body)
+        return new DeprecatedNightwolfRequest(json.method, json.url, json.headers, body)
             .setParameterTemplateKeys(paramObject)
             .setEnvironmentTemplateKeys(envObject)
         ;
     }
 
     /**
-     * Parses lines of a http file into a NightwolfRequest object.
+     * Parses lines of a http file into a DeprecatedNightwolfRequest object.
      * @param {string[]} lines lines of a http file to parse
      */
-    public static fromHttpFile(lines: string[]): NightwolfRequest {
+    public static fromHttpFile(lines: string[]): DeprecatedNightwolfRequest {
         let section = 1;
 
         let method = null;
@@ -62,14 +62,14 @@ export class RequestFactory {
             }
         });
 
-        return new NightwolfRequest(method, url, headers, body)
+        return new DeprecatedNightwolfRequest(method, url, headers, body)
             .setParameterTemplateKeys(paramObject)
             .setEnvironmentTemplateKeys(envObject)
         ;
     }
 
 
-    public static substitute(request: NightwolfRequest, environment: IKeyValue, parameters: IKeyValue): NightwolfRequest {
+    public static substitute(request: DeprecatedNightwolfRequest, environment: IKeyValue, parameters: IKeyValue): DeprecatedNightwolfRequest {
         let str = request.toString();
         const missing = [];
 

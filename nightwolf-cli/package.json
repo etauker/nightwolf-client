@@ -1,7 +1,7 @@
 {
-  "name": "nightwolf-client-core",
+  "name": "nightwolf-client-cli",
   "version": "1.0.0",
-  "description": "Nightwolf REST API client core logic",
+  "description": "Nightwolf CLI application",
   "main": "index.js",
   "scripts": {
     "prebuild": "rimraf ./dist",
@@ -16,25 +16,17 @@
     "rest",
     "nightwolf",
     "client",
-    "core"
+    "cli"
   ],
   "author": "etauker@gmail.com",
   "license": "MIT",
-  "dependencies": {
-    "rimraf": "^3.0.2",
-    "rxjs": "^6.6.3",
-    "ts-node": "^10.4.0",
-    "typescript": "^4.5.4",
-    "uuidv4": "^6.2.6"
-  },
   "devDependencies": {
     "@types/mocha": "^8.2.0",
     "@types/node": "^12.20.0",
     "better-docs": "^2.3.2",
-    "chai": "^4.3.0",
     "esm": "^3.2.25",
     "express": "^4.17.1",
-    "jsdoc": "^3.6.7",
-    "mocha": "^8.3.0"
+    "jsdoc": "^3.6.6",
+    "typescript": "^4.5.4"
   }
 }

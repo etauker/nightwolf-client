@@ -14,7 +14,7 @@ import { IncomingHttpHeaders } from 'http';
  *      }
  * }
  */
-export interface IResponse {
+export interface NightwolfResponse {
 
     /** response status code */
     code: number;

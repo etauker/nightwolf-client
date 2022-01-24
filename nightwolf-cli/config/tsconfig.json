@@ -6,8 +6,7 @@
         "declaration": true,
         "outDir": "../dist",
         "lib": [
-            "ES2018",
-            "esnext"
+            "ES2018"
         ]
     },
     "include": [

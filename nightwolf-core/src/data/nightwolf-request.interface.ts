@@ -16,7 +16,7 @@ import { OutgoingHttpHeaders } from 'http';
  *      }
  * }
  */
-export interface IRequest {
+export interface NightwolfRequest {
 
     /** request method */
     method: string;

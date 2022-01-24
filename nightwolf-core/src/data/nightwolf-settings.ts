@@ -2,10 +2,11 @@
 /**
  * Represents persisted settings from Nightwolf application.
  */
-export class NightwolfSettings {
+export class DeprecatedNightwolfSettings {
 
     private requestRoot: string;
     private environmentRoot: string;
+    private customTemplates: ICustomTemplate[];
 
     constructor() {
         // TODO: replace with peristed storage
@@ -13,7 +14,7 @@ export class NightwolfSettings {
         this.environmentRoot = '~/.nightwolf/envs';
     }
 
-    public setRequestRoot(requestRoot: string): NightwolfSettings {
+    public setRequestRoot(requestRoot: string): DeprecatedNightwolfSettings {
         this.requestRoot = requestRoot;
         return this;
     }
@@ -22,7 +23,7 @@ export class NightwolfSettings {
         return this.requestRoot.replace('~', process.env.HOME);
     }
 
-    public setEnvironmentRoot(environmentRoot: string): NightwolfSettings {
+    public setEnvironmentRoot(environmentRoot: string): DeprecatedNightwolfSettings {
         this.environmentRoot = environmentRoot;
         return this;
     }

@@ -6,7 +6,7 @@ import { IRequest } from './request.interface';
 /**
  * A REST API request object.
  */
-export class NightwolfRequest {
+export class DeprecatedNightwolfRequest {
 
     private method: string;
     private url: string;
@@ -24,23 +24,23 @@ export class NightwolfRequest {
     }
 
 
-    public setParameterTemplateKeys(parameterTemplate: string[]): NightwolfRequest {
+    public setParameterTemplateKeys(parameterTemplate: string[]): DeprecatedNightwolfRequest {
         this.parameterTemplate = parameterTemplate;
         return this;
     }
-    public setEnvironmentTemplateKeys(environmentTemplate: string[]): NightwolfRequest {
+    public setEnvironmentTemplateKeys(environmentTemplate: string[]): DeprecatedNightwolfRequest {
         this.environmentTemplate = environmentTemplate;
         return this;
     }
     // if a content length is already set, do not overwrite
-    public setBody(body: string= ''): NightwolfRequest {
+    public setBody(body: string= ''): DeprecatedNightwolfRequest {
         const buffer = Buffer.from(body || '', 'utf-8');
         if (!this._isContentLengthSet()) {
             this.headers['Content-Length'] = `${ Buffer.byteLength(buffer) }`;            
         }
         return this;
     }
-    public setHeaders(headers: OutgoingHttpHeaders = {}): NightwolfRequest {
+    public setHeaders(headers: OutgoingHttpHeaders = {}): DeprecatedNightwolfRequest {
         this.headers = JSON.parse(JSON.stringify(headers));
         return this;
     }

@@ -1,5 +1,6 @@
 import { IKeyValue } from '../data/key-value.interface'
-import { NightwolfOptions } from '../data/nightwolf-options';
+import { NightwolfOptions } from '../data/nightwolf-options.interface';
+import { NightwolfSettings } from '../data/nightwolf-settings.interface';
 import { FileService } from "./file-service";
 
 
@@ -32,7 +33,7 @@ export class EnvironmentService {
      * @param {string} path the full path to load (including filename and extension)
      * @returns {Promise<IKeyValue>} loaded key-value pairs as an object
      */
-    public static loadEnvironment(options: NightwolfOptions, path: string): Promise<IKeyValue> {
+    public static loadEnvironment(settings: NightwolfSettings, options: NightwolfOptions, path: string): Promise<IKeyValue> {
         return new Promise((resolve, reject) => {
             const env = {};
 
@@ -60,14 +61,16 @@ export class EnvironmentService {
      * the file later in the array overwrites any previous values for the same key.
      * @param {NightwolfOptions} options request options
      * @param {string[]} paths the full path to load (including filename and extension)
+     * @param {IKeyValue} overrides the values to override resolved settings with
      * @returns {Promise<IKeyValue>} merged environment variables as an object
      */
-    public static resolveEnvironments(options: NightwolfOptions, paths: string[]): Promise<IKeyValue> {
-        const promises = paths.map(path => EnvironmentService.loadEnvironment(options, path));
+    public static resolveEnvironments(settings: NightwolfSettings, options: NightwolfOptions, paths: string[], overrides: IKeyValue = {}): Promise<IKeyValue> {
+        const promises = paths.map(path => EnvironmentService.loadEnvironment(settings, options, path));
         return Promise.all(promises).then(environments => {
-            return environments.reduce((merged, env) => {
+            const merged = environments.reduce((merged, env) => {
                 return { ...merged, ...env };
             }, process.env);
+            return { ...merged, ...overrides };
         });
     }
 
